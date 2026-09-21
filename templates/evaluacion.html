@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Evaluación - Portal IA{% endblock %}
+
+{% block content %}
+<section class="seccion-bloque">
+    <h2>Evaluación y Métricas de IA</h2>
+    <p>Medir el desempeño de los modelos de Inteligencia Artificial es crucial para garantizar su precisión, equidad y confiabilidad. Dependiendo del tipo de tarea, se utilizan diferentes enfoques y métricas:</p>
+    <ul>
+        <li><strong>Clasificación:</strong> Métricas como <em>Precisión (Accuracy)</em>, <em>Exhaustividad (Recall)</em>, <em>Precision</em> y la puntuación <em>F1-Score</em> evalúan la capacidad de categorizar datos correctamente.</li>
+        <li><strong>Regresión:</strong> Se utilizan métricas de error como el Error Cuadrático Medio (MSE) y el Error Absoluto Medio (MAE).</li>
+        <li><strong>Modelos de Lenguaje (LLMs):</strong> Se evalúan con pruebas especializadas de alucinación, coherencia y referencias cruzadas mediante técnicas como RAG o métricas como BLEU y ROUGE.</li>
+    </ul>
+</section>
+{% endblock %}

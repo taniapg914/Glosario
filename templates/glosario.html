@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Glosario - Portal IA{% endblock %}
+
+{% block extra_nav %}
+<input type="text" id="inputBuscar" class="buscador" placeholder="Buscar concepto..." onkeyup="filtrarPorPalabra()">
+{% endblock %}
+
+{% block content %}
+<h2>Glosario de Conceptos</h2>
+
+{% for palabra, datos in glosario.items() %}
+<div class="tarjeta">
+    <div class="texto">
+        <h3 class="palabra">{{ palabra }}</h3>
+        <p class="definicion">{{ datos['definicion'] }}</p>
+    </div>
+    <div class="imagen-contenedor">
+        <img src="{{ url_for('static', filename=datos['imagen']) }}" alt="{{ palabra }}">
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function filtrarPorPalabra() {
+        let input = document.getElementById('inputBuscar').value.toLowerCase();
+        let tarjetas = document.getElementsByClassName('tarjeta');
+
+        for (let i = 0; i < tarjetas.length; i++) {
+            let palabra = tarjetas[i].getElementsByClassName('palabra')[0].innerText.toLowerCase();
+
+            if (palabra.includes(input)) {
+                tarjetas[i].style.display = "flex";
+            } else {
+                tarjetas[i].style.display = "none";
+            }
+        }
+    }
+</script>
+{% endblock %}
