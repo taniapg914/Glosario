@@ -4,12 +4,36 @@
 
 {% block content %}
 <section class="seccion-bloque">
-    <h2>Evaluación y Métricas de IA</h2>
-    <p>Medir el desempeño de los modelos de Inteligencia Artificial es crucial para garantizar su precisión, equidad y confiabilidad. Dependiendo del tipo de tarea, se utilizan diferentes enfoques y métricas:</p>
-    <ul>
-        <li><strong>Clasificación:</strong> Métricas como <em>Precisión (Accuracy)</em>, <em>Exhaustividad (Recall)</em>, <em>Precision</em> y la puntuación <em>F1-Score</em> evalúan la capacidad de categorizar datos correctamente.</li>
-        <li><strong>Regresión:</strong> Se utilizan métricas de error como el Error Cuadrático Medio (MSE) y el Error Absoluto Medio (MAE).</li>
-        <li><strong>Modelos de Lenguaje (LLMs):</strong> Se evalúan con pruebas especializadas de alucinación, coherencia y referencias cruzadas mediante técnicas como RAG o métricas como BLEU y ROUGE.</li>
-    </ul>
+    <h2>Problema:Evaluar conocimientos adquiridos sobre la línea
+de tiempo de antecedentes de Inteligencia artificial
+</h2>
+<img src="{{ url_for('static', filename='VoF.png') }}" 
+         alt="Juego de Verdadero o Falso Asistido por IA" 
+         class="imagen-seccion">
+<h3>Juego de Verdadero o Falso Asistido por Inteligencia Artificial</h3>
+    <p>El objetivo de este reporte es documentar el procedimiento detallado para diseñar y
+ejecutar una actividad didáctica e interactiva utilizando una Inteligencia Artificial (IA).
+La actividad consistió en un juego de "Verdadero o Falso" basado en una línea del tiempo previa, con la finalidad de autoevaluar y consolidar los conocimientos
+adquiridos sobre un tema específico de manera dinámica.</p>
+<p>PROMT Utilizado:"En base a la linea del tiempo de antecedentes de Inteligencia Artificial crea un verdadero o falso Reglas:
+"</p>
+<ul>
+  <li>Ponme una frase a la vez mezclando datos reales o falsos de la linea del tiempo.</li>
+  <li>Yo solo responderé "Verdadero" o "Falso".</li>
+  <li>Si fallo, explícame la respuesta correcta.</li>
+  <li>Haremos 10 fraces en total.Al final de las preguntas dame una calificación para saber cuanto he aprendido del tema .</li>
+</ul>
+<p>
+    En cada turno, la IA me lanzaba una afirmación y yo respondía si era verdadero o
+falso .En caso de que fallara en la respuesta, la IA tenía la instrucción de explicar la
+respuesta correcta de forma.Esta retroalimentación inmediata fue clave en mi
+aprendizaje. En lugar de arrastrar la duda o memorizar un dato equivocado, la IA
+corregía mi mapa mental en el momento exacto del fallo, asegurando que asimilaba
+la información verdadera de inmediato.
+Al terminar las 10 preguntas, la IA procesó todo mi historial de respuestas para
+entregarme una calificación final . Esta métrica me sirvió como un indicador directo
+de mi nivel de dominio sobre el tema, permitiéndome identificar con precisión si ya
+estaba listo o si necesitaba repasar alguna sección específica de la línea de tiempo.
+</p>
 </section>
 {% endblock %}
