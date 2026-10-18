@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Algoritmos de Búsqueda - Portal IA{% endblock %}
+
+{% block content %}
+<div class="contenedor">
+    <h1>Algoritmos de Búsqueda en Inteligencia Artificial</h1>
+
+    <!-- a) Algoritmo de búsqueda -->
+    <div class="tarjeta">
+        <div class="texto">
+            <h2 class="palabra">¿Qué es un Algoritmo de Búsqueda?</h2>
+            <p class="definicion">
+                Un <strong>algoritmo de búsqueda</strong> es una secuencia finita y ordenada de pasos lógicos diseñada para explorar un espacio de estados (o conjunto de datos) con el propósito de encontrar un elemento, un objetivo o la ruta idónea hacia una solución específica. En la Inteligencia Artificial, estos algoritmos permiten que un agente evalúe diferentes alternativas de decisión ante un problema complejo.
+            </p>
+        </div>
+        {% if info and info.imagen %}
+        <div class="imagen-contenedor">
+            <img src="{{ url_for('static', filename=info.imagen) }}" alt="Algoritmo de Búsqueda">
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- b) Elementos que intervienen en un algoritmo de búsqueda -->
+    <div class="tarjeta">
+        <div class="texto">
+            <h2 class="palabra">Elementos que intervienen en un Algoritmo de Búsqueda</h2>
+            <p class="definicion">Para formalizar y resolver un problema de búsqueda, se definen los siguientes componentes principales:</p>
+            <ul>
+                <li><strong>Estado Inicial:</strong> La configuración o punto de partida desde el cual el agente inicia la búsqueda.</li>
+                <li><strong>Espacio de Estados:</strong> El conjunto de todos los estados alcanzables a partir del estado inicial mediante cualquier secuencia de acciones.</li>
+                <li><strong>Conjunto de Acciones / Operadores:</strong> Las reglas o funciones que permiten transitar de un estado a otro.</li>
+                <li><strong>Prueba de Objetivo (Test Meta):</strong> La condición o función lógica que determina si el estado actual corresponde a la solución buscada.</li>
+                <li><strong>Costo del Camino (Función de Costo):</strong> Un valor numérico asignado a cada paso o ruta, util para evaluar la eficiencia o calidad del camino encontrado.</li>
+                <li><strong>Función Heurística $h(n)$ (Opcional):</strong> Estimación del costo restante desde el estado actual $n$ hasta el objetivo.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- c) Ejemplo de un algoritmo de búsqueda identificando elementos -->
+    <div class="tarjeta">
+        <div class="texto">
+            <h2 class="palabra">Ejemplo Práctico: Encontrar la ruta en un GPS (Google Maps)</h2>
+            <p class="definicion">
+                Imagina que deseas encontrar la ruta más corta en automóvil desde tu hogar hasta tu universidad:
+            </p>
+            <ul>
+                <li><strong>Estado Inicial:</strong> Ubicación de tu Casa (Coordenadas A).</li>
+                <li><strong>Espacio de Estados:</strong> Todas las intersecciones, calles y avenidas registradas en el mapa de la ciudad.</li>
+                <li><strong>Acciones / Operadores:</strong> "Girar a la derecha", "Seguir de frente", "Girar a la izquierda" en cada intersección.</li>
+                <li><strong>Prueba de Objetivo:</strong> ¿La ubicación actual coincide con las coordenadas de la Universidad?</li>
+                <li><strong>Costo del Camino:</strong> La suma de la distancia en kilómetros (o tiempo en minutos) de cada tramo recorrido.</li>
+                <li><strong>Función Heurística:</strong> La distancia en línea recta desde la ubicación actual hasta la universidad.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- d) Clasificación de algoritmos de búsqueda -->
+    <div class="tarjeta">
+        <div class="texto">
+            <h2 class="palabra">Clasificación de los Algoritmos de Búsqueda</h2>
+            <p class="definicion">Los algoritmos de búsqueda se clasifican según el nivel de información disponible sobre el entorno:</p>
+            
+            <h3>1. Búsqueda No Informada (Ciega)</h3>
+            <p class="definicion">No disponen de información sobre la cercanía del estado actual hacia el objetivo, salvo si es o no el estado final.</p>
+            <ul>
+                <li><strong>Búsqueda en Anchura (BFS):</strong> Explora el árbol nivel por nivel. Es completa y óptima si todos los pasos tienen el mismo costo.</li>
+                <li><strong>Búsqueda en Profundidad (DFS):</strong> Explora la rama lo más profundo posible antes de realizar un retroceso (backtracking). Consume poca memoria.</li>
+                <li><strong>Búsqueda de Costo Uniforme (UCS):</strong> Expande siempre el nodo con el costo acumulado más bajo.</li>
+            </ul>
+
+            <h3>2. Búsqueda Informada (Heurística)</h3>
+            <p class="definicion">Utilizan conocimiento del dominio mediante funciones heurísticas para estimar qué ruta es más prometedora.</p>
+            <ul>
+                <li><strong>Algoritmo A*:</strong> Evalúa los nodos combinando el costo real acumulado $g(n)$ y el costo estimado a la meta $h(n)$ ($f(n) = g(n) + h(n)$).</li>
+                <li><strong>Búsqueda Primero el Mejor (Greedy Best-First Search):</strong> Expande únicamente el nodo que parece estar más cerca de la meta según la heurística.</li>
+            </ul>
+
+            <h3>3. Búsqueda Adversarial (Juegos)</h3>
+            <p class="definicion">Diseñados para entornos donde dos o más agentes compiten con objetivos opuestos.</p>
+            <ul>
+                <li><strong>Algoritmo Minimax:</strong> Calcula el mejor movimiento asumiendo que el rival elegirá la jugada que más perjudique al jugador.</li>
+                <li><strong>Poda Alfa-Beta:</strong> Optimización de Minimax que descarta ramas que no afectarán la decisión final.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

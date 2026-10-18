@@ -14,7 +14,22 @@
     <div class="texto">
         <h3 class="palabra">{{ palabra }}</h3>
         <p class="definicion">{{ datos['definicion'] }}</p>
+        
+        <!-- Botón para Machine Learning -->
+        {% if palabra == "Aprendizaje automático" %}
+        <a href="{{ url_for('machine_learning') }}" class="boton-aprender">
+            Ver ejemplo de Machine Learning →
+        </a>
+        {% endif %}
+
+        <!-- Botón para Sistema Inteligente -->
+        {% if palabra == "Sistema Inteligente" %}
+        <a href="{{ url_for('sistema_inteligente') }}" class="boton-aprender">
+            Ver más sobre Sistemas Inteligentes →
+        </a>
+        {% endif %}
     </div>
+    
     <div class="imagen-contenedor">
         <img src="{{ url_for('static', filename=datos['imagen']) }}" alt="{{ palabra }}">
     </div>

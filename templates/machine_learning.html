@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}Machine Learning - Portal IA{% endblock %}
+
+{% block content %}
+
+<section class="seccion-bloque">
+
+    <h2> Aprendizaje Automático</h2>
+<div class="imagen-ml">
+    <img src="{{ url_for('static', filename='machine_learning.png') }}"
+         alt="Ejemplo de Machine Learning" class="imagen-seccion">
+</div>
+    <h3>¿Qué es el Machine Learning?</h3>
+
+    <p>
+        El aprendizaje automático, conocido como <strong>Machine Learning</strong>,
+        es una rama de la Inteligencia Artificial que permite que las computadoras
+        aprendan a partir de datos.
+    </p>
+
+    <p>
+        En lugar de programar manualmente todas las instrucciones que debe seguir
+        una computadora, se le proporcionan datos para que pueda encontrar patrones
+        y utilizarlos para realizar predicciones o tomar decisiones.
+    </p>
+
+    
+
+    <h3> ¿Cómo funciona?</h3>
+
+    <p>
+        El funcionamiento del Machine Learning puede explicarse mediante varios
+        pasos sencillos:
+    </p>
+
+    <ol>
+        <li>
+            <strong>Recopilación de datos:</strong>
+            se reúnen datos que servirán para enseñar al sistema.
+        </li>
+
+        <li>
+            <strong>Preparación de los datos:</strong>
+            la información se organiza y se eliminan datos incorrectos o
+            innecesarios.
+        </li>
+
+        <li>
+            <strong>Entrenamiento:</strong>
+            el modelo analiza los datos para encontrar patrones.
+        </li>
+
+        <li>
+            <strong>Evaluación:</strong>
+            se comprueba qué tan bien funciona el modelo utilizando información
+            que no había visto anteriormente.
+        </li>
+
+        <li>
+            <strong>Predicción:</strong>
+            finalmente, el modelo puede utilizar lo aprendido para analizar
+            información nueva.
+        </li>
+    </ol>
+
+    
+    <h3>Ejemplo de Machine Learning</h3>
+
+    <h4>Detección de correos SPAM</h4>
+
+    <p>
+        Un ejemplo muy común de Machine Learning se encuentra en los
+        <strong>correos electrónicos</strong>.
+    </p>
+
+    <p>
+        Los sistemas de correo pueden analizar miles de mensajes que anteriormente
+        fueron clasificados como <strong>"SPAM"</strong> o
+        <strong>"NO SPAM"</strong>.
+    </p>
+
+    <p>
+        Con esta información, el modelo aprende a reconocer características que
+        suelen aparecer en los mensajes no deseados, como determinadas palabras,
+        enlaces sospechosos o patrones de comportamiento.
+    </p>
+
+    <p>
+        Cuando llega un correo nuevo, el modelo analiza sus características y
+        determina si probablemente se trata de un correo SPAM.
+    </p>
+
+    <div class="ejemplo-ml">
+
+        <p><strong> Datos:</strong></p>
+        <p>
+            El sistema recibe miles de correos previamente clasificados.
+        </p>
+
+        <p><strong>Entrenamiento:</strong></p>
+        <p>
+            El modelo aprende las características que aparecen en los correos SPAM.
+        </p>
+
+        <p><strong>Nuevo correo:</strong></p>
+        <p>
+            Llega un mensaje que el modelo nunca había analizado.
+        </p>
+
+        <p><strong>Resultado:</strong></p>
+        <p>
+            El modelo determina si el mensaje debe clasificarse como SPAM
+            o como correo normal.
+        </p>
+
+    </div>
+
+    
+
+    <h3>¿Dónde se utiliza el Machine Learning?</h3>
+
+    <ul>
+
+        <li>
+            <strong> Correos electrónicos:</strong>
+            para detectar mensajes SPAM y correos sospechosos.
+        </li>
+
+        <li>
+            <strong>Comercio electrónico:</strong>
+            para recomendar productos según los intereses de los usuarios.
+        </li>
+
+        <li>
+            <strong>Entretenimiento:</strong>
+            plataformas como servicios de películas, series y música pueden
+            utilizar sistemas de recomendación.
+        </li>
+
+        <li>
+            <strong> Bancos:</strong>
+            para identificar operaciones sospechosas y posibles fraudes.
+        </li>
+
+        <li>
+            <strong>Medicina:</strong>
+            para ayudar a analizar imágenes y grandes cantidades de información.
+        </li>
+
+        <li>
+            <strong> Transporte:</strong>
+            para sistemas de navegación, asistencia al conductor y vehículos
+            inteligentes.
+        </li>
+
+        <li>
+            <strong>Aplicaciones:</strong>
+            para reconocimiento de imágenes, voz y texto.
+        </li>
+
+    </ul>
+
+    
+    <h3>Características del Machine Learning</h3>
+
+    <ul>
+
+        <li>
+            <strong>Aprende a partir de datos:</strong>
+            necesita información para encontrar patrones.
+        </li>
+
+        <li>
+            <strong>Identifica patrones:</strong>
+            puede encontrar relaciones que pueden ser difíciles de detectar
+            manualmente.
+        </li>
+
+        <li>
+            <strong>Realiza predicciones:</strong>
+            utiliza lo aprendido para analizar nuevos datos.
+        </li>
+
+        <li>
+            <strong>Clasifica información:</strong>
+            puede colocar datos en diferentes categorías.
+        </li>
+
+        <li>
+            <strong>Trabaja con grandes cantidades de información:</strong>
+            puede analizar grandes conjuntos de datos.
+        </li>
+
+        <li>
+            <strong>Puede mejorar:</strong>
+            dependiendo del problema, más datos de calidad y un mejor entrenamiento
+            pueden ayudar a mejorar sus resultados.
+        </li>
+
+    </ul>
+
+    
+    <h3>Tipos principales de Machine Learning</h3>
+
+    <h4>1. Aprendizaje supervisado</h4>
+
+    <p>
+        El sistema aprende utilizando datos que ya tienen una respuesta conocida.
+        Por ejemplo, correos que ya están identificados como SPAM o NO SPAM.
+    </p>
+
+    <h4>2. Aprendizaje no supervisado</h4>
+
+    <p>
+        El sistema recibe datos sin categorías previamente establecidas y busca
+        patrones o grupos dentro de la información.
+    </p>
+
+    <h4>3. Aprendizaje por refuerzo</h4>
+
+    <p>
+        El sistema aprende mediante prueba y error. Recibe recompensas cuando
+        realiza una acción correcta y penalizaciones cuando realiza una acción
+        incorrecta.
+    </p>
+
+    
+
+    <h3>Ejemplo </h3>
+
+    <p>
+        En un sistema escolar, el Machine Learning podría utilizarse para
+        analizar las calificaciones y asistencias de los alumnos.
+    </p>
+
+    <p>
+        Con estos datos, el sistema podría identificar patrones relacionados con
+        el rendimiento académico y generar una alerta cuando detecte que un
+        alumno podría necesitar apoyo.
+    </p>
+
+    <p>
+        De esta manera, el Machine Learning puede utilizarse dentro de una
+        aplicación para analizar información y ayudar en la toma de decisiones.
+    </p>
+
+    
+    <h3>Resumen</h3>
+
+    <p>
+        El <strong>Machine Learning</strong> permite que los sistemas informáticos
+        aprendan a partir de datos. Se utiliza en diferentes áreas como educación,
+        bancos, medicina, comercio electrónico, entretenimiento y aplicaciones
+        móviles.
+    </p>
+
+    <p>
+        Su principal característica es que puede encontrar patrones en los datos
+        y utilizar esos patrones para realizar predicciones o clasificaciones.
+    </p>
+
+    <br>
+
+    <a href="{{ url_for('glosario') }}" class="boton-aprender">
+        ← Regresar al glosario
+    </a>
+
+</section>
+
+{% endblock %}

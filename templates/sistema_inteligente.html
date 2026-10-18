@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Sistema Inteligente - Portal IA{% endblock %}
+
+{% block content %}
+
+<section class="seccion-bloque">
+
+    <h2> Sistema Inteligente</h2>
+<div class="imagen-si">
+    <img src="{{ url_for('static', filename='sistemainteligente.jpg') }}"
+         alt="Ejemplo de Sistema Inteligente" class="imagen-seccion">
+</div>
+   
+
+
+
+    <h3>Ciclo de Vida y Funcionamiento de un Sistema Inteligente</h3>
+
+    <div>
+        <h3>1. Captura de Datos (Percepción)</h3>
+        <ul>
+            <li><strong>Entradas físicas:</strong> Cámaras (detección de rostros) y sensores IoT.</li>
+            <li><strong>Entradas de audio:</strong> Dispositivos de voz.</li>
+            <li><strong>Interacción de usuario:</strong> Registro de clics y búsquedas.</li>
+        </ul>
+    </div>
+
+    <!-- Fase 2 -->
+    <div>
+        <h3>2. Almacenamiento y Preprocesamiento (Digestión)</h3>
+        <ul>
+            <li><strong>Almacenamiento:</strong> Guardado en bases de datos locales o Cloud Storage.</li>
+            <li><strong>Limpieza:</strong> Filtrado, organización y categorización de datos brutos.</li>
+            <li><strong>Feature Engineering:</strong> Extracción de características matemáticas clave.</li>
+        </ul>
+    </div>
+
+    <!-- Fase 3 -->
+    <div>
+        <h3>3. Procesamiento Central (Cerebro Digital)</h3>
+        <ul>
+            <li><strong>Machine Learning:</strong> Algoritmos tradicionales (Árboles de decisión).</li>
+            <li><strong>Deep Learning:</strong> Redes Neuronales Profundas para patrones complejos.</li>
+            <li><strong>Modelo Entrenado:</strong> Toma de inferencias (visión y lenguaje natural).</li>
+        </ul>
+    </div>
+
+    <!-- Fase 4 -->
+    <div>
+        <h3>4. Salida y Acción (Resultado)</h3>
+        <ul>
+            <li><strong>Resultados:</strong> Generación de reportes y mapas de probabilidad.</li>
+            <li><strong>Automatización:</strong> Ejecución de tareas y control de accesos.</li>
+            <li><strong>Predicciones:</strong> Alertas tempranas (pronósticos económicos/clima).</li>
+        </ul>
+    </div>
+
+    <!-- Retroalimentación -->
+    <div>
+        <h3>Retroalimentación para la Mejora Continua</h3>
+        <p>Los datos nuevos de los usuarios y los registros de acceso se envían de regreso de forma constante. Esto permite el <strong>re-entrenamiento automático</strong> del cerebro digital para ajustar parámetros, corregir errores y evolucionar el modelo.</p>
+    </div>
+
+
+    <br>
+
+    <a href="{{ url_for('glosario') }}" class="boton-aprender">
+        ← Regresar al glosario
+    </a>
+
+</section>
+
+{% endblock %}

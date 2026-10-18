@@ -29,6 +29,7 @@ GLOSARIO = {
     "Aprendizaje automático": {
         "definicion": "El aprendizaje automático (o machine learning) es un área de la informática que entrena a los sistemas informáticos para identificar patrones y hacer predicciones a través de la repetición constante de datos y algoritmos. Es una tecnología ideal para desafíos que la programación tradicional no puede resolver fácilmente, tales como el reconocimiento de imágenes y la traducción de idiomas.",
         "imagen": "Aprendizajeautomatico.jpg"
+        
     },
     "Aprendizaje profundo (Deep Learning)": {
         "definicion": "Los modelos de aprendizaje profundo son un subconjunto de las redes neuronales. Con múltiples capas ocultas, los algoritmos de aprendizaje profundo pueden reconocer patrones más sutiles y complejos. Al igual que las redes neuronales, los algoritmos de aprendizaje profundo involucran nodos interconectados donde se ajustan los pesos, pero, como se mencionó anteriormente, hay más capas y más cálculos que pueden realizar ajustes a la salida para determinar cada decisión. Las decisiones de los modelos de aprendizaje profundo suelen ser muy difíciles de interpretar, ya que hay muchas capas ocultas que realizan diferentes cálculos que no se traducen fácilmente a reglas en inglés (u otro idioma legible para humanos).",
@@ -70,6 +71,11 @@ GLOSARIO = {
         "definicion": "Las redes neuronales, también llamadas redes neuronales artificiales (RNA), son un subconjunto de los algoritmos de aprendizaje automático (ML). Se inspiraron en las interconexiones de las neuronas y las sinapsis del cerebro humano. En una red neuronal, después de que los datos ingresan a la primera capa, pasan por una capa oculta de nodos donde se realizan cálculos que ajustan la fuerza de las conexiones entre ellos, para luego llegar a una capa de salida. Las redes neuronales son la base de los modelos de aprendizaje profundo (deep learning) y se utilizan para tareas como el reconocimiento de imágenes, la traducción automática y la generación de texto.",
         "imagen": "RedesNeuronales.jpg"
     },
+     "Sistema Inteligente": {
+            "definicion":"Los sistemas inteligentes son una tecnología que ha emergido y cobrado mayor importancia en menos de una década.Esto se debe a que los sistemas inteligentes son la respuesta al acelerado crecimiento tecnológico de los últimos años y las necesidades de las personas y organizaciones en un mundo cada vez más interconectado. Los sistemas inteligentes son capaces de aprender, adaptarse y tomar decisiones de manera autónoma, lo que los hace valiosos en una amplia gama de aplicaciones, desde la automatización industrial hasta la atención médica y la gestión de datos.",
+            "imagen": "Sistemainteligente.jpg"
+        },
+    
     "Sobreajuste (Overfitting)": {
         "definicion": "Un error de entrenamiento que ocurre cuando un modelo memoriza los datos de entrenamiento de forma tan estricta que es incapaz de generalizar o funcionar correctamente con datos nuevos. El sobreajuste puede ser mitigado mediante técnicas como la regularización, la validación cruzada y el aumento de datos.",
         "imagen": "Sobreajuste.jpg"
@@ -103,6 +109,21 @@ def tipos():
 @app.route("/glosario")
 def glosario():
     return render_template("glosario.html", glosario=GLOSARIO)
-
+@app.route('/machine-learning')
+def machine_learning():
+    return render_template('machine_learning.html')
+@app.route('/sistema-inteligente')
+def sistema_inteligente():
+    info_sistema = GLOSARIO.get("Sistema Inteligente", {})
+    return render_template('sistema_inteligente.html', info=info_sistema) # <-- Agrega info=info_sistema
+@app.route('/ensayo')
+def ensayo():
+    return render_template('ensayo.html')
+@app.route("/Abusqueda")
+def algoritmo_busqueda():
+    info_algoritmo = GLOSARIO.get("Algoritmo", {})
+    return render_template(
+        "Abusqueda.html", info=info_algoritmo
+    )
 if __name__ == "__main__":
     app.run(debug=True)

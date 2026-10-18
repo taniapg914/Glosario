@@ -200,6 +200,23 @@
             font-size: 12px;
             color: #bdc3c7;
         }
+        .boton-aprender {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 18px;
+    background-color: #2c3e50;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.boton-aprender:hover {
+    background-color: #2c3e50;
+    transform: translateY(-2px);
+}
+
     </style>
 </head>
 <body>
@@ -211,6 +228,9 @@
             <li><a href="{{ url_for('evaluacion') }}">Evaluación</a></li>
             <li><a href="{{ url_for('tipos') }}">Tipos de IA</a></li>
             <li><a href="{{ url_for('glosario') }}">Glosario</a></li>
+            <li><a href="{{ url_for('ensayo') }}">Ensayo</a></li>
+            <li><a href="{{ url_for('algoritmo_busqueda') }}">Algoritmo de Búsqueda</a></li>
+
         </ul>
         {% block extra_nav %}{% endblock %}
     </nav>
