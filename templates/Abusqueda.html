@@ -54,6 +54,20 @@
             </ul>
         </div>
     </div>
+    <!-- SECCIÓN NUEVA: Infografía -->
+<div class="tarjeta" style="display: block; width: 100%;">
+    <div class="texto" style="text-align: center; margin-bottom: 20px;">
+        <h2 class="palabra">Infografía: Clasificación de Algoritmos de Búsqueda</h2>
+       
+    </div>
+    <div class="imagen-contenedor" style="text-align: center; width: 100%;">
+        {% if info and info.infografia %}
+            <img src="{{ url_for('static', filename=info.infografia) }}" alt="Infografía de Algoritmos de Búsqueda" style="max-width: 800px; width: 100%; height: auto; display: block; margin: 0 auto;">
+        {% else %}
+            <img src="{{ url_for('static', filename='Algoritmosdebusqueda.png') }}" alt="Infografía de Algoritmos de Búsqueda" style="max-width: 700px; width: 100%; height: auto; display: block; margin: 0 auto;">
+        {% endif %}
+    </div>
+</div>
 
     <!-- d) Clasificación de algoritmos de búsqueda -->
     <div class="tarjeta">
