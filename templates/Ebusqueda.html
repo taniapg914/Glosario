@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Simulador BFS y DFS - Portal IA{% endblock %}
+
+{% block content %}
+<style>
+    .simulador-card {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #2c3e50;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 15px;
+        box-sizing: border-box;
+        transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    .btn-ejecutar {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .btn-ejecutar:hover {
+        background-color: #2980b9;
+        transform: translateY(-1px);
+    }
+
+    .pasos-container {
+        margin-top: 25px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .paso-item {
+        background-color: #f8fafc;
+        border-left: 4px solid #3498db;
+        padding: 12px 18px;
+        border-radius: 6px;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .paso-item.exito {
+        background-color: #f0fdf4;
+        border-left-color: #22c55e;
+        font-weight: bold;
+        color: #15803d;
+    }
+
+    .paso-item.espera {
+        background-color: #fffbe6;
+        border-left-color: #eab308;
+        color: #854d0e;
+    }
+</style>
+
+<div class="simulador-card">
+    <h1>Simulador de Algoritmos de Búsqueda</h1>
+    <p style="color: #64748b; font-size: 16px;">
+        {{ info.definicion if info else 'Explora visualmente cómo operan BFS y DFS en estructuras de grafos y árboles.' }}
+    </p>
+
+    <form method="POST" action="/Ebusqueda">
+        <div class="form-group">
+            <label for="tipo_algoritmo">Algoritmo a probar:</label>
+            <select name="tipo_algoritmo" id="tipo_algoritmo" class="form-control">
+                <option value="bfs" {% if tipo == 'bfs' %}selected{% endif %}>
+                    Búsqueda en Amplitud (BFS) - Ejemplo Hotel
+                </option>
+                <option value="dfs" {% if tipo == 'dfs' %}selected{% endif %}>
+                    Búsqueda en Profundidad (DFS) - Ejemplo Auto
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="objetivo">Elemento / Habitación a buscar:</label>
+            <input type="text" name="objetivo" id="objetivo" class="form-control" 
+                   placeholder="Ej: Habitación 203 o Llaves Olvidadas">
+        </div>
+
+        <button type="submit" class="btn-ejecutar">🔍 Ejecutar Búsqueda</button>
+    </form>
+</div>
+
+{% if pasos %}
+<div class="simulador-card">
+    <h2>Traza de Ejecución ({{ tipo.upper() }}):</h2>
+    <div class="pasos-container">
+        {% for paso in pasos %}
+            {% if '¡Encontré' in paso or '¡Por fin!' in paso %}
+                <div class="paso-item exito">{{ paso }}</div>
+            {% elif 'lista de espera' in paso or 'Compartimento' in paso %}
+                <div class="paso-item espera">{{ paso }}</div>
+            {% else %}
+                <div class="paso-item">{{ paso }}</div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

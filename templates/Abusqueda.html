@@ -14,11 +14,7 @@
                 Un <strong>algoritmo de búsqueda</strong> es una secuencia finita y ordenada de pasos lógicos diseñada para explorar un espacio de estados (o conjunto de datos) con el propósito de encontrar un elemento, un objetivo o la ruta idónea hacia una solución específica. En la Inteligencia Artificial, estos algoritmos permiten que un agente evalúe diferentes alternativas de decisión ante un problema complejo.
             </p>
         </div>
-        {% if info and info.imagen %}
-        <div class="imagen-contenedor">
-            <img src="{{ url_for('static', filename=info.imagen) }}" alt="Algoritmo de Búsqueda">
-        </div>
-        {% endif %}
+      
     </div>
 
     <!-- b) Elementos que intervienen en un algoritmo de búsqueda -->
@@ -64,7 +60,7 @@
         {% if info and info.infografia %}
             <img src="{{ url_for('static', filename=info.infografia) }}" alt="Infografía de Algoritmos de Búsqueda" style="max-width: 800px; width: 100%; height: auto; display: block; margin: 0 auto;">
         {% else %}
-            <img src="{{ url_for('static', filename='Algoritmosdebusqueda.png') }}" alt="Infografía de Algoritmos de Búsqueda" style="max-width: 700px; width: 100%; height: auto; display: block; margin: 0 auto;">
+            <img src="{{ url_for('static', filename='clasificacionAB.jpg') }}" alt="Infografía de Algoritmos de Búsqueda" style="max-width: 700px; width: 100%; height: auto; display: block; margin: 0 auto;">
         {% endif %}
     </div>
 </div>

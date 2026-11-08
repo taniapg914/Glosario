@@ -40,22 +40,76 @@
             font-weight: bold;
             text-decoration: none;
         }
-        .navbar .menu {
+
+        .main-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-button {
+            background-color: #ffffff;
+            color: #2c3e50;
+            padding: 10px 18px;
+            font-size: 15px;
+            font-weight: 600;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-button:hover {
+            background-color: #ecf0f1;
+            border-color: #2980b9;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            color: #3498db;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-menu-list {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 115%;
+            background-color: #ffffff;
+            min-width: 220px;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 8px 0;
+            z-index: 1001;
             list-style: none;
             margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 20px;
         }
-        .navbar .menu a {
-            color: #ecf0f1;
+
+        .dropdown-menu-list li a {
+            color: #333;
+            padding: 12px 20px;
             text-decoration: none;
-            font-size: 15px;
-            transition: color 0.3s;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
         }
-        .navbar .menu a:hover {
-            color: #3498db;
+
+        .dropdown-menu-list li a:hover {
+            background-color: #00aaff;
+            color: #ffffff;
         }
+
+        .main-dropdown:hover .dropdown-menu-list {
+            display: block;
+        }
+
+        .main-dropdown:hover .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
         .buscador {
             padding: 8px 15px;
             border-radius: 20px;
@@ -109,39 +163,37 @@
             margin-bottom: 20px;
         }
 
-        /* Grid de los tipos de IA */
         .grid-tipos {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    margin-top: 20px;
-}
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 20px;
+        }
 
-.tarjeta-tipo {
-    background: #f8f9fa;
-    border-left: 4px solid #3498db;
-    padding: 20px;
-    border-radius: 6px;
-    display: flex;
-    flex-direction: row; /* Coloca el texto y la imagen lado a lado */
-    align-items: center;
-    gap: 20px;
-}
+        .tarjeta-tipo {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+        }
 
-.tarjeta-tipo > div {
-    flex: 1; /* El texto ocupa el espacio disponible a la izquierda */
-}
+        .tarjeta-tipo > div {
+            flex: 1;
+        }
 
-.imagen-tipo {
-    width: 350px; /* Ancho fijo para la imagen */
-    height: auto;
-    max-height: 450px;
-    object-fit: contain;
-    border-radius: 4px;
-    margin-top: 0;
-}
+        .imagen-tipo {
+            width: 350px;
+            height: auto;
+            max-height: 450px;
+            object-fit: contain;
+            border-radius: 4px;
+            margin-top: 0;
+        }
 
-        /* Estilos para el Glosario */
         .tarjeta { 
             background: white; 
             padding: 20px; 
@@ -201,37 +253,46 @@
             color: #bdc3c7;
         }
         .boton-aprender {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 18px;
-    background-color: #2c3e50;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: 0.3s;
-}
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 18px;
+            background-color: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
 
-.boton-aprender:hover {
-    background-color: #2c3e50;
-    transform: translateY(-2px);
-}
-
+        .boton-aprender:hover {
+            background-color: #2c3e50;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <a href="{{ url_for('inicio') }}" class="logo">Portal IA</a>
-        <ul class="menu">
-            <li><a href="{{ url_for('inicio') }}">Inicio</a></li>
-            <li><a href="{{ url_for('antecedentes') }}">Antecedentes</a></li>
-            <li><a href="{{ url_for('evaluacion') }}">Evaluación</a></li>
-            <li><a href="{{ url_for('tipos') }}">Tipos de IA</a></li>
-            <li><a href="{{ url_for('glosario') }}">Glosario</a></li>
-            <li><a href="{{ url_for('ensayo') }}">Ensayo</a></li>
-            <li><a href="{{ url_for('algoritmo_busqueda') }}">Algoritmo de Búsqueda</a></li>
+        
+        <!-- Botón Desplegable Único -->
+        <div class="main-dropdown">
+            <button class="dropdown-button">
+                Menú de Navegación 
+                <span class="dropdown-arrow">&#9660;</span>
+            </button>
+            <ul class="dropdown-menu-list">
+                <li><a href="{{ url_for('inicio') }}">Inicio</a></li>
+                <li><a href="{{ url_for('antecedentes') }}">Antecedentes</a></li>
+                <li><a href="{{ url_for('evaluacion') }}">Evaluación</a></li>
+                <li><a href="{{ url_for('tipos') }}">Tipos de IA</a></li>
+                <li><a href="{{ url_for('glosario') }}">Glosario</a></li>
+                <li><a href="{{ url_for('ensayo') }}">Ensayo</a></li>
+                <li><a href="{{ url_for('algoritmo_busqueda') }}">Algoritmo de Búsqueda</a></li>
+                <li><a href="{{ url_for('Ebusqueda') }}">Ejemplos de Búsqueda (BFS/DFS)</a></li>
+                <li><a href="{{ url_for('clasificar_busqueda') }}">Clasificador de Búsqueda</a></li>
+            </ul>
+        </div>
 
-        </ul>
         {% block extra_nav %}{% endblock %}
     </nav>
 
@@ -244,9 +305,9 @@
             <div class="footer-info">
                 <strong>Contacto:</strong> <a href="mailto:utp0211991@alumno.utpuebla.edu.mx">utp0211991@alumno.utpuebla.edu.mx</a>
                 <div class="red-social">
-                <strong>Síguenos:</strong> 
-                <a href="https://www.instagram.com/taniapg.28?stkn=MW9vdDFkdTB5bDBxcw==" target="_blank" rel="noopener noreferrer">Instagram</a>
-            </div>
+                    <strong>Síguenos:</strong> 
+                    <a href="https://www.instagram.com/taniapg.28?stkn=MW9vdDFkdTB5bDBxcw==" target="_blank" rel="noopener noreferrer">Instagram</a>
+                </div>
             </div>
             <div class="copyright">
                 &copy; Glosario de IA. Todos los derechos reservados.(TPG)

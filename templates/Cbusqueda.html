@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Algoritmos de Búsqueda - Portal IA{% endblock %}
+
+{% block content %}<!-- Estilos CSS integrados -->
+<style>
+    .classifier-container {
+        max-width: 750px;
+        margin: 30px auto;
+        padding: 25px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        font-family: 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .classifier-title {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+    }
+
+    .form-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+
+    .input-text {
+        flex: 1;
+        padding: 12px 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .input-text:focus {
+        outline: none;
+        border-color: #3498db;
+    }
+
+    .btn-submit {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        background-color: #2980b9;
+    }
+
+    .result-card {
+        background: #f8fafc;
+        border-left: 5px solid #3498db;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .result-header {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 15px;
+    }
+
+    .phrase-box {
+        background: #ffffff;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 15px;
+        font-style: italic;
+        color: #475569;
+    }
+
+    .tag-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: white;
+        background-color: #64748b;
+        margin-left: 5px;
+    }
+
+    /* Colores personalizados según la clase */
+    .bg-evolutiva { background-color: #8e44ad; }
+    .bg-heuristica { background-color: #d35400; }
+    .bg-ciega { background-color: #27ae60; }
+    .bg-desconocido { background-color: #7f8c8d; }
+
+    .confidence-container {
+        margin-top: 15px;
+    }
+
+    .progress-bar-bg {
+        background: #e2e8f0;
+        height: 12px;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-top: 5px;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #3498db, #2ecc71);
+        border-radius: 6px;
+        transition: width 0.5s ease;
+    }
+</style>
+
+<div class="classifier-container">
+    <h3 class="classifier-title">Prueba el clasificador de Algoritmos de Búsqueda</h3>
+    
+    <!-- Formulario -->
+    <form method="POST" action="/Cbusqueda" class="form-group">
+        <input type="text" name="texto_busqueda" class="input-text" placeholder="Ej. Explorar caminos usando mutaciones genéticas..." required>
+        <button type="submit" class="btn-submit">Clasificar</button>
+    </form>
+
+    <!-- Tarjeta de Resultados -->
+    {% if resultado %}
+        {% if resultado.error %}
+            <div class="result-card" style="border-left-color: #e74c3c;">
+                <p style="color: #c0392b; font-weight: 600;">⚠️ {{ resultado.error }}</p>
+            </div>
+        {% else %}
+            <div class="result-card">
+                <div class="result-header">Resultado de la Clasificación</div>
+                
+                <div class="phrase-box">
+                    "{{ resultado.texto }}"
+                </div>
+
+                <p>
+                    <strong>Tipo detectado:</strong>
+                    {% if 'Evolutiva' in resultado.etiqueta %}
+                        <span class="tag-badge bg-evolutiva"> {{ resultado.etiqueta }}</span>
+                    {% elif 'Heuristica' in resultado.etiqueta %}
+                        <span class="tag-badge bg-heuristica"> {{ resultado.etiqueta }}</span>
+                    {% elif 'ciega' in resultado.etiqueta or 'Ciega' in resultado.etiqueta %}
+                        <span class="tag-badge bg-ciega"> {{ resultado.etiqueta }}</span>
+                    {% else %}
+                        <span class="tag-badge bg-desconocido"> {{ resultado.etiqueta }}</span>
+                    {% endif %}
+                </p>
+
+                <div class="confidence-container">
+                    <strong>Nivel de Confianza:</strong> {{ resultado.confianza }}%
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width: {{ resultado.confianza }}%;"></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
