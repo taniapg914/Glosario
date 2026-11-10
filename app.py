@@ -235,12 +235,23 @@ def Ebusqueda():
 
     if request.method == "POST":
         tipo_busqueda = request.form.get("tipo_algoritmo")
-        objetivo = request.form.get("objetivo", "").strip()
+        objetivo_raw = request.form.get("objetivo", "").strip()
 
         if tipo_busqueda == "bfs":
-            pasos_ejecucion, _ = buscar_amigo_bfs(MAPA_HOTEL, objetivo or "Habitación 203")
+            # Si el usuario solo escribe un número (ej. "201"), se le antepone "Habitación "
+            if objetivo_raw.isdigit():
+                objetivo = f"Habitación {objetivo_raw}"
+            else:
+                objetivo = objetivo_raw if objetivo_raw else "Habitación 203"
+
+            pasos_ejecucion, _ = buscar_amigo_bfs(MAPA_HOTEL, objetivo)
+
         elif tipo_busqueda == "dfs":
-            pasos_ejecucion, _ = buscar_llaves_dfs(ZONAS_AUTO, "Asiento Delantero", objetivo or "Llaves Olvidadas")
+            pasos_ejecucion, _ = buscar_llaves_dfs(
+                ZONAS_AUTO, 
+                "Asiento Delantero", 
+                objetivo_raw if objetivo_raw else "Llaves Olvidadas"
+            )
 
     return render_template(
         "Ebusqueda.html", 

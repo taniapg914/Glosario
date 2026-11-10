@@ -55,22 +55,34 @@
         transform: translateY(-1px);
     }
 
+    /* ESTILOS DE ANIMACIÓN */
     .pasos-container {
         margin-top: 25px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
     }
 
     .paso-item {
         background-color: #f8fafc;
         border-left: 4px solid #3498db;
-        padding: 12px 18px;
-        border-radius: 6px;
+        padding: 14px 18px;
+        border-radius: 8px;
         font-size: 15px;
         display: flex;
         align-items: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        
+        /* Oculto por defecto para animar entrada */
+        opacity: 0;
+        transform: translateY(15px);
+        transition: all 0.4s ease-out;
+    }
+
+    /* Estado visible tras animación */
+    .paso-item.revelado {
+        opacity: 1;
+        transform: translateY(0);
     }
 
     .paso-item.exito {
@@ -78,6 +90,7 @@
         border-left-color: #22c55e;
         font-weight: bold;
         color: #15803d;
+        font-size: 16px;
     }
 
     .paso-item.espera {
@@ -85,12 +98,20 @@
         border-left-color: #eab308;
         color: #854d0e;
     }
+
+    /* Indicadores de carga */
+    .progreso-status {
+        font-weight: bold;
+        color: #3498db;
+        margin-bottom: 10px;
+        display: block;
+    }
 </style>
 
 <div class="simulador-card">
     <h1>Simulador de Algoritmos de Búsqueda</h1>
     <p style="color: #64748b; font-size: 16px;">
-        {{ info.definicion if info else 'Explora visualmente cómo operan BFS y DFS en estructuras de grafos y árboles.' }}
+        {{ info.definicion if info else 'Explora visualmente cómo operan BFS y DFS paso a paso.' }}
     </p>
 
     <form method="POST" action="/Ebusqueda">
@@ -109,7 +130,7 @@
         <div class="form-group">
             <label for="objetivo">Elemento / Habitación a buscar:</label>
             <input type="text" name="objetivo" id="objetivo" class="form-control" 
-                   placeholder="Ej: Habitación 203 o Llaves Olvidadas">
+                   placeholder="Ej: 203, Habitación 203 o Llaves Olvidadas">
         </div>
 
         <button type="submit" class="btn-ejecutar">🔍 Ejecutar Búsqueda</button>
@@ -119,7 +140,9 @@
 {% if pasos %}
 <div class="simulador-card">
     <h2>Traza de Ejecución ({{ tipo.upper() }}):</h2>
-    <div class="pasos-container">
+    <span id="progreso-texto" class="progreso-status">⏳ Abriendo puertas / Buscando compartimentos...</span>
+    
+    <div class="pasos-container" id="pasos-lista">
         {% for paso in pasos %}
             {% if '¡Encontré' in paso or '¡Por fin!' in paso %}
                 <div class="paso-item exito">{{ paso }}</div>
@@ -132,4 +155,34 @@
     </div>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const elementosPaso = document.querySelectorAll('.paso-item');
+    const textoProgreso = document.getElementById('progreso-texto');
+    
+    if (elementosPaso.length > 0) {
+        let retardo = 400; // Tiempo en milisegundos entre cada paso
+        
+        elementosPaso.forEach((elemento, index) => {
+            setTimeout(() => {
+                elemento.classList.add('revelado');
+                
+                // Hacer scroll suave hacia el paso actual que se abre
+                elemento.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                // Al llegar al último paso, actualizar estado de progreso
+                if (index === elementosPaso.length - 1) {
+                    if (textoProgreso) {
+                        textoProgreso.innerHTML = "✅ ¡Búsqueda finalizada!";
+                        textoProgreso.style.color = "#22c55e";
+                    }
+                }
+            }, index * retardo);
+        });
+    }
+});
+</script>
 {% endblock %}
