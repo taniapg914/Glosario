@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Simulador BFS y DFS - Portal IA{% endblock %}
+{% block title %}Simulador BFS - Portal IA{% endblock %}
 
 {% block content %}
 <style>
@@ -11,10 +11,8 @@
         box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         margin-bottom: 25px;
     }
-    
-    .form-group {
-        margin-bottom: 20px;
-    }
+
+    .form-group { margin-bottom: 20px; }
 
     .form-group label {
         display: block;
@@ -33,10 +31,7 @@
         transition: border-color 0.2s;
     }
 
-    .form-control:focus {
-        border-color: #3498db;
-        outline: none;
-    }
+    .form-control:focus { border-color: #3498db; outline: none; }
 
     .btn-ejecutar {
         background-color: #3498db;
@@ -50,12 +45,94 @@
         transition: background-color 0.2s, transform 0.1s;
     }
 
-    .btn-ejecutar:hover {
-        background-color: #2980b9;
-        transform: translateY(-1px);
+    .btn-ejecutar:hover { background-color: #2980b9; transform: translateY(-1px); }
+
+    /* ===== PASILLO DE PUERTAS ===== */
+    .pasillo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        justify-content: center;
+        padding: 25px 15px;
+        margin: 20px 0;
+        background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
+        border-radius: 12px;
+        border-bottom: 6px solid #94a3b8;
     }
 
-    /* ESTILOS DE ANIMACIÓN */
+    .puerta {
+        width: 80px;
+        height: 130px;
+        position: relative;
+        perspective: 600px;
+        background: #1e293b;              /* interior de la habitación */
+        border: 5px solid #5b3a1e;        /* marco */
+        border-radius: 6px 6px 0 0;
+        transition: box-shadow 0.4s, background 0.4s;
+    }
+
+    /* Hoja de la puerta (la que gira) */
+    .puerta .hoja {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #a8652b, #8b4f1f);
+        transform-origin: left center;
+        transition: transform 0.6s ease-in-out;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 14px;
+        box-sizing: border-box;
+        color: #fde68a;
+        font-weight: bold;
+        font-size: 15px;
+        border-radius: 2px;
+        backface-visibility: hidden;
+    }
+
+    /* Perilla */
+    .puerta .hoja::after {
+        content: "";
+        position: absolute;
+        right: 8px;
+        top: 60%;
+        width: 9px;
+        height: 9px;
+        background: #fbbf24;
+        border-radius: 50%;
+    }
+
+    .puerta.abierta .hoja { transform: rotateY(-75deg); }
+
+    /* Luz dentro de la habitación al abrir */
+    .puerta.abierta { background: #fef3c7; box-shadow: 0 0 18px rgba(250, 204, 21, 0.7); }
+
+    .puerta.encontrada { background: #bbf7d0; box-shadow: 0 0 22px rgba(34, 197, 94, 0.9); }
+
+    .puerta .interior {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        opacity: 0;
+        transition: opacity 0.4s 0.3s;
+    }
+
+    .puerta.abierta .interior { opacity: 1; }
+
+    .puerta .numero {
+        position: absolute;
+        bottom: -26px;
+        left: 0; right: 0;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: #475569;
+    }
+
+    /* ===== PASOS ===== */
     .pasos-container {
         margin-top: 25px;
         display: flex;
@@ -72,18 +149,12 @@
         display: flex;
         align-items: center;
         box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        
-        /* Oculto por defecto para animar entrada */
         opacity: 0;
         transform: translateY(15px);
         transition: all 0.4s ease-out;
     }
 
-    /* Estado visible tras animación */
-    .paso-item.revelado {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    .paso-item.revelado { opacity: 1; transform: translateY(0); }
 
     .paso-item.exito {
         background-color: #f0fdf4;
@@ -99,7 +170,6 @@
         color: #854d0e;
     }
 
-    /* Indicadores de carga */
     .progreso-status {
         font-weight: bold;
         color: #3498db;
@@ -109,28 +179,18 @@
 </style>
 
 <div class="simulador-card">
-    <h1>Simulador de Algoritmos de Búsqueda</h1>
+    <h1>Simulador de Búsqueda en Amplitud (BFS)</h1>
     <p style="color: #64748b; font-size: 16px;">
-        {{ info.definicion if info else 'Explora visualmente cómo operan BFS y DFS paso a paso.' }}
+        {{ info.definicion if info else 'Explora visualmente cómo opera BFS recorriendo las habitaciones de un hotel paso a paso.' }}
     </p>
 
     <form method="POST" action="/Ebusqueda">
-        <div class="form-group">
-            <label for="tipo_algoritmo">Algoritmo a probar:</label>
-            <select name="tipo_algoritmo" id="tipo_algoritmo" class="form-control">
-                <option value="bfs" {% if tipo == 'bfs' %}selected{% endif %}>
-                    Búsqueda en Amplitud (BFS) - Ejemplo Hotel
-                </option>
-                <option value="dfs" {% if tipo == 'dfs' %}selected{% endif %}>
-                    Búsqueda en Profundidad (DFS) - Ejemplo Auto
-                </option>
-            </select>
-        </div>
+        <input type="hidden" name="tipo_algoritmo" value="bfs">
 
         <div class="form-group">
-            <label for="objetivo">Elemento / Habitación a buscar:</label>
-            <input type="text" name="objetivo" id="objetivo" class="form-control" 
-                   placeholder="Ej: 203, Habitación 203 o Llaves Olvidadas">
+            <label for="objetivo">Habitación a buscar:</label>
+            <input type="text" name="objetivo" id="objetivo" class="form-control"
+                   placeholder="Ej: 203 o Habitación 203">
         </div>
 
         <button type="submit" class="btn-ejecutar">🔍 Ejecutar Búsqueda</button>
@@ -140,13 +200,17 @@
 {% if pasos %}
 <div class="simulador-card">
     <h2>Traza de Ejecución ({{ tipo.upper() }}):</h2>
-    <span id="progreso-texto" class="progreso-status">⏳ Abriendo puertas / Buscando compartimentos...</span>
-    
-    <div class="pasos-container" id="pasos-lista">
+    <span id="progreso-texto" class="progreso-status">⏳ Abriendo puertas del hotel...</span>
+
+    <!-- Las puertas se generan con JS a partir de los pasos -->
+    <div class="pasillo" id="pasillo"></div>
+    <div id="mensaje-final" class="paso-item exito" style="display: none;"></div>
+
+    <div class="pasos-container" id="pasos-lista" style="display: none;">
         {% for paso in pasos %}
             {% if '¡Encontré' in paso or '¡Por fin!' in paso %}
                 <div class="paso-item exito">{{ paso }}</div>
-            {% elif 'lista de espera' in paso or 'Compartimento' in paso %}
+            {% elif 'lista de espera' in paso %}
                 <div class="paso-item espera">{{ paso }}</div>
             {% else %}
                 <div class="paso-item">{{ paso }}</div>
@@ -156,33 +220,79 @@
 </div>
 {% endif %}
 {% endblock %}
-
 {% block scripts %}
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const elementosPaso = document.querySelectorAll('.paso-item');
+document.addEventListener("DOMContentLoaded", function () {
+    const elementosPaso = Array.from(document.querySelectorAll('#pasos-lista .paso-item'));
     const textoProgreso = document.getElementById('progreso-texto');
-    
-    if (elementosPaso.length > 0) {
-        let retardo = 400; // Tiempo en milisegundos entre cada paso
-        
-        elementosPaso.forEach((elemento, index) => {
-            setTimeout(() => {
-                elemento.classList.add('revelado');
-                
-                // Hacer scroll suave hacia el paso actual que se abre
-                elemento.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const pasillo = document.getElementById('pasillo');
 
-                // Al llegar al último paso, actualizar estado de progreso
-                if (index === elementosPaso.length - 1) {
-                    if (textoProgreso) {
-                        textoProgreso.innerHTML = "✅ ¡Búsqueda finalizada!";
-                        textoProgreso.style.color = "#22c55e";
-                    }
-                }
-            }, index * retardo);
-        });
-    }
+    if (elementosPaso.length === 0) return;
+
+    const numeroDe = el => {
+        const m = el.textContent.match(/\b\d{2,4}\b/);
+        return m ? m[0] : null;
+    };
+
+    // Crear una puerta por cada habitación mencionada
+    const puertas = {};
+    elementosPaso.forEach(el => {
+        const num = numeroDe(el);
+        if (num && !puertas[num]) {
+            const p = document.createElement('div');
+            p.className = 'puerta';
+            p.innerHTML =
+                '<div class="interior">🛏️</div>' +
+                '<div class="hoja">' + num + '</div>' +
+                '<div class="numero">Hab. ' + num + '</div>';
+            pasillo.appendChild(p);
+            puertas[num] = p;
+        }
+    });
+
+    if (Object.keys(puertas).length === 0) pasillo.style.display = 'none';
+
+    const RETARDO = 1200;
+    const TIEMPO_ABIERTA = 800;
+    let t = 0;
+
+    elementosPaso.forEach(el => {
+        const num = numeroDe(el);
+        const puerta = num ? puertas[num] : null;
+        const esExito = el.classList.contains('exito');
+        const abre = puerta && (esExito || /abriendo puerta/i.test(el.textContent));
+
+        if (!abre) return;   // los pasos "lista de espera" no animan nada
+
+        setTimeout(() => {
+            puerta.classList.add('abierta');
+            puerta.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            if (esExito) {
+                puerta.classList.add('encontrada');
+            } else {
+                setTimeout(() => puerta.classList.remove('abierta'), TIEMPO_ABIERTA);
+            }
+        }, t);
+
+        t += RETARDO;
+    });
+
+    setTimeout(() => {
+        if (textoProgreso) {
+            textoProgreso.innerHTML = "✅ ¡Búsqueda finalizada!";
+            textoProgreso.style.color = "#22c55e";
+        }
+
+        // Mostrar solo el mensaje de éxito (si existe)
+        const exito = document.querySelector('#pasos-lista .paso-item.exito');
+        const mensaje = document.getElementById('mensaje-final');
+        if (exito && mensaje) {
+            mensaje.textContent = exito.textContent;
+            mensaje.style.display = 'flex';
+            setTimeout(() => mensaje.classList.add('revelado'), 50);
+        }
+    }, t);
 });
 </script>
 {% endblock %}

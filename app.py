@@ -103,13 +103,7 @@ MAPA_HOTEL = {
     "Habitación 203": [],
 }
 
-ZONAS_AUTO = {
-    "Asiento Delantero": ["Guantera", "Debajo del Asiento"],
-    "Guantera": ["Bolsa de Documentos", "Caja de Fusibles"],
-    "Bolsa de Documentos": ["Llaves Olvidadas"],
-    "Caja de Fusibles": [],
-    "Debajo del Asiento": [],
-}
+
 
 # --- Algoritmos de búsqueda ---
 def buscar_amigo_bfs(hotel, amigo_buscado):
@@ -137,30 +131,7 @@ def buscar_amigo_bfs(hotel, amigo_buscado):
 
     return pasos, False
 
-def buscar_llaves_dfs(zonas_auto, zona_inicial, objetivo):
-    pila_de_busqueda = [zona_inicial]
-    visitados = set()
-    pasos = []
 
-    while pila_de_busqueda:
-        zona_actual = pila_de_busqueda.pop()
-
-        if zona_actual in visitados:
-            continue
-
-        pasos.append(f"👉 Buscando a fondo en: {zona_actual}")
-        visitados.add(zona_actual)
-
-        if zona_actual == objetivo:
-            pasos.append(f"🎉 ¡Por fin! Encontré {objetivo} en {zona_actual}")
-            return pasos, True
-
-        for sub_zona in zonas_auto.get(zona_actual, []):
-            if sub_zona not in visitados:
-                pila_de_busqueda.append(sub_zona)
-                pasos.append(f"   🗄️ Compartimento interno descubierto: {sub_zona}")
-
-    return pasos, False
 
 # --- Rutas de Flask ---
 @app.route("/")
@@ -234,24 +205,16 @@ def Ebusqueda():
     tipo_busqueda = None
 
     if request.method == "POST":
-        tipo_busqueda = request.form.get("tipo_algoritmo")
+        tipo_busqueda = "bfs"
         objetivo_raw = request.form.get("objetivo", "").strip()
 
-        if tipo_busqueda == "bfs":
-            # Si el usuario solo escribe un número (ej. "201"), se le antepone "Habitación "
-            if objetivo_raw.isdigit():
-                objetivo = f"Habitación {objetivo_raw}"
-            else:
-                objetivo = objetivo_raw if objetivo_raw else "Habitación 203"
+        # Si el usuario solo escribe un número (ej. "201"), se le antepone "Habitación "
+        if objetivo_raw.isdigit():
+            objetivo = f"Habitación {objetivo_raw}"
+        else:
+            objetivo = objetivo_raw if objetivo_raw else "Habitación 203"
 
-            pasos_ejecucion, _ = buscar_amigo_bfs(MAPA_HOTEL, objetivo)
-
-        elif tipo_busqueda == "dfs":
-            pasos_ejecucion, _ = buscar_llaves_dfs(
-                ZONAS_AUTO, 
-                "Asiento Delantero", 
-                objetivo_raw if objetivo_raw else "Llaves Olvidadas"
-            )
+        pasos_ejecucion, _ = buscar_amigo_bfs(MAPA_HOTEL, objetivo)
 
     return render_template(
         "Ebusqueda.html", 
