@@ -176,16 +176,81 @@
         margin-bottom: 10px;
         display: block;
     }
+    /* Habitación reservada: se queda abierta en rojo */
+.puerta.encontrada.reservada {
+    background: #fecaca;
+    box-shadow: 0 0 22px rgba(239, 68, 68, 0.9);
+}
+
+.reserva-box {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.badge-reservada {
+    display: inline-block;
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.btn-reservar, .btn-liberar {
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+.btn-reservar { background: #22c55e; }
+.btn-reservar:hover { background: #16a34a; }
+.btn-liberar { background: #ef4444; }
+.btn-liberar:hover { background: #dc2626; }
+
+.aviso {
+    background: #eff6ff;
+    border-left: 4px solid #3498db;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.lista-reservadas { list-style: none; padding: 0; margin: 0; }
+.lista-reservadas li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+.btn-liberar-chico {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
 </style>
 
 <div class="simulador-card">
     <h1>Simulador de Búsqueda en Amplitud (BFS)</h1>
     <p style="color: #64748b; font-size: 16px;">
-        {{ info.definicion if info else 'Explora visualmente cómo opera BFS recorriendo las habitaciones de un hotel paso a paso.' }}
+        Imagina que llegas a un hotel y buscas una habitación sin saber dónde está. Escribes el número, y el simulador empieza en la recepción y va abriendo puertas, primero las más cercanas y luego las siguientes, cerrando cada una que no es la correcta. Cuando llega a la tuya, la puerta se queda abierta y brilla en verde. Si está libre, puedes reservarla y su puerta se pondrá roja para que nadie más la reserve. Cuando el huésped se vaya, presionas "Marcar como disponible" y la habitación queda libre otra vez. Esta forma de buscar se llama búsqueda en amplitud: revisar primero todo lo que está cerca antes de ir más lejos.
     </p>
 
     <form method="POST" action="/Ebusqueda">
         <input type="hidden" name="tipo_algoritmo" value="bfs">
+        <input type="hidden" name="accion" value="buscar">
 
         <div class="form-group">
             <label for="objetivo">Habitación a buscar:</label>
@@ -193,19 +258,46 @@
                    placeholder="Ej: 203 o Habitación 203">
         </div>
 
-        <button type="submit" class="btn-ejecutar">🔍 Ejecutar Búsqueda</button>
+        <button type="submit" class="btn-ejecutar"> Ejecutar Búsqueda</button>
     </form>
 </div>
 
 {% if pasos %}
 <div class="simulador-card">
-    <h2>Traza de Ejecución ({{ tipo.upper() }}):</h2>
-    <span id="progreso-texto" class="progreso-status">⏳ Abriendo puertas del hotel...</span>
+    <h2>HOTEL ESTRELLA</h2>
+    <span id="progreso-texto" class="progreso-status">Abriendo puertas del hotel...</span>
 
     <!-- Las puertas se generan con JS a partir de los pasos -->
     <div class="pasillo" id="pasillo"></div>
     <div id="mensaje-final" class="paso-item exito" style="display: none;"></div>
 
+    <!-- Aviso de reserva / liberación -->
+    {% if mensaje %}
+        <div class="aviso">{{ mensaje }}</div>
+    {% endif %}
+
+    <!-- Botones de reservar / liberar (aparecen al terminar la animación) -->
+    {% if encontrada %}
+    <div class="reserva-box" id="acciones-reserva" style="display: none;">
+        {% if reservada %}
+            <div class="badge-reservada">{{ encontrada }} está RESERVADA</div>
+            <form method="POST" action="/Ebusqueda">
+                <input type="hidden" name="objetivo" value="{{ encontrada }}">
+                <input type="hidden" name="accion" value="liberar">
+                <button type="submit" class="btn-liberar">Marcar como disponible</button>
+            </form>
+        {% else %}
+            <p style="margin-top:0;">La {{ encontrada }} está <strong>disponible</strong>.</p>
+            <form method="POST" action="/Ebusqueda">
+                <input type="hidden" name="objetivo" value="{{ encontrada }}">
+                <input type="hidden" name="accion" value="reservar">
+                <button type="submit" class="btn-reservar">Reservar habitación</button>
+            </form>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Lista oculta: el JS la lee para animar las puertas -->
     <div class="pasos-container" id="pasos-lista" style="display: none;">
         {% for paso in pasos %}
             {% if '¡Encontré' in paso or '¡Por fin!' in paso %}
@@ -219,13 +311,34 @@
     </div>
 </div>
 {% endif %}
+
+<!-- Panel de habitaciones reservadas (siempre visible si hay alguna) -->
+{% if reservadas %}
+<div class="simulador-card">
+    <h2>Habitaciones reservadas</h2>
+    <ul class="lista-reservadas">
+        {% for hab in reservadas %}
+        <li>
+            <span>{{ hab }}</span>
+            <form method="POST" action="/Ebusqueda" style="margin:0;">
+                <input type="hidden" name="objetivo" value="{{ hab }}">
+                <input type="hidden" name="accion" value="liberar">
+                <button type="submit" class="btn-liberar-chico">Marcar disponible</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
 {% endblock %}
+
 {% block scripts %}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const elementosPaso = Array.from(document.querySelectorAll('#pasos-lista .paso-item'));
     const textoProgreso = document.getElementById('progreso-texto');
     const pasillo = document.getElementById('pasillo');
+    const RESERVADA = {{ 'true' if reservada else 'false' }};
 
     if (elementosPaso.length === 0) return;
 
@@ -270,6 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (esExito) {
                 puerta.classList.add('encontrada');
+                if (RESERVADA) puerta.classList.add('reservada');
             } else {
                 setTimeout(() => puerta.classList.remove('abierta'), TIEMPO_ABIERTA);
             }
@@ -284,7 +398,7 @@ document.addEventListener("DOMContentLoaded", function () {
             textoProgreso.style.color = "#22c55e";
         }
 
-        // Mostrar solo el mensaje de éxito (si existe)
+        // Mostrar el mensaje de éxito
         const exito = document.querySelector('#pasos-lista .paso-item.exito');
         const mensaje = document.getElementById('mensaje-final');
         if (exito && mensaje) {
@@ -292,6 +406,10 @@ document.addEventListener("DOMContentLoaded", function () {
             mensaje.style.display = 'flex';
             setTimeout(() => mensaje.classList.add('revelado'), 50);
         }
+
+        // Mostrar los botones de reservar / liberar
+        const acciones = document.getElementById('acciones-reserva');
+        if (acciones) acciones.style.display = 'block';
     }, t);
 });
 </script>

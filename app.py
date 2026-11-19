@@ -5,7 +5,7 @@ import requests
 app = Flask(__name__)
 
 # URL de la API asignada
-ML4K_API_URL = "https://machinelearningforkids.co.uk/api/scratch/e52db8c0-d89d-11f1-9dd6-979fe2bdb61cf7ce1819-521f-44bc-abf3-67afb9aab976/classify"
+ML4K_API_URL = "https://machinelearningforkids.co.uk/api/scratch/a6cd7390-dee7-11f1-92a1-db0daa3843b7f406b8d5-bb01-4472-b72f-42b9549ef62d/classify"
 
 GLOSARIO = {
     "Agentes de IA": {
@@ -121,13 +121,13 @@ def buscar_amigo_bfs(hotel, amigo_buscado):
         visitados.add(lugar_actual)
 
         if lugar_actual == amigo_buscado:
-            pasos.append(f"🎉 ¡Encontré a {amigo_buscado} en {lugar_actual}!")
+            pasos.append(f" ¡Encontré a {amigo_buscado} en {lugar_actual}!")
             return pasos, True
 
         for siguiente_lugar in hotel.get(lugar_actual, []):
             if siguiente_lugar not in visitados:
                 cola_de_busqueda.append(siguiente_lugar)
-                pasos.append(f"   📋 Agregado a la lista de espera: {siguiente_lugar}")
+                pasos.append(f"    Agregado a la lista de espera: {siguiente_lugar}")
 
     return pasos, False
 
@@ -198,17 +198,25 @@ def clasificar_busqueda():
 
     return render_template("Cbusqueda.html", info=info_algoritmo, resultado=resultado)
 
+# Habitaciones reservadas (se guarda en memoria mientras el servidor esté encendido)
+HABITACIONES_RESERVADAS = set()
+
+
 @app.route("/Ebusqueda", methods=["GET", "POST"])
 def Ebusqueda():
     info_algoritmo = GLOSARIO.get("Algoritmo", {})
     pasos_ejecucion = []
     tipo_busqueda = None
+    encontrada = None      # nombre de la habitación si fue encontrada
+    reservada = False      # si esa habitación está reservada ahora mismo
+    mensaje = None
 
     if request.method == "POST":
         tipo_busqueda = "bfs"
+        accion = request.form.get("accion", "buscar")
         objetivo_raw = request.form.get("objetivo", "").strip()
 
-        # Si el usuario solo escribe un número (ej. "201"), se le antepone "Habitación "
+        # Si solo escribe un número (ej. "201"), se antepone "Habitación "
         if objetivo_raw.isdigit():
             objetivo = f"Habitación {objetivo_raw}"
         else:
@@ -216,11 +224,37 @@ def Ebusqueda():
 
         pasos_ejecucion, _ = buscar_amigo_bfs(MAPA_HOTEL, objetivo)
 
+        # ¿La búsqueda la encontró?
+        fue_encontrada = any(
+            "¡Encontré" in p or "¡Por fin!" in p for p in pasos_ejecucion
+        )
+
+        if fue_encontrada:
+            encontrada = objetivo.title()   # clave normalizada
+
+            if accion == "reservar":
+                if encontrada in HABITACIONES_RESERVADAS:
+                    mensaje = f" La {encontrada} ya está reservada."
+                else:
+                    HABITACIONES_RESERVADAS.add(encontrada)
+                    mensaje = f" {encontrada} reservada con éxito."
+
+            elif accion == "liberar":
+                if encontrada in HABITACIONES_RESERVADAS:
+                    HABITACIONES_RESERVADAS.discard(encontrada)
+                    mensaje = f"{encontrada} ahora está disponible."
+
+            reservada = encontrada in HABITACIONES_RESERVADAS
+
     return render_template(
-        "Ebusqueda.html", 
-        info=info_algoritmo, 
-        pasos=pasos_ejecucion, 
-        tipo=tipo_busqueda
+        "Ebusqueda.html",            # <-- pon aquí el nombre real de tu archivo
+        pasos=pasos_ejecucion,
+        tipo=tipo_busqueda,
+        info=info_algoritmo,
+        encontrada=encontrada,
+        reservada=reservada,
+        mensaje=mensaje,
+        reservadas=sorted(HABITACIONES_RESERVADAS),
     )
 
 if __name__ == "__main__":
