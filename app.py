@@ -2,7 +2,7 @@ from collections import deque
 from flask import Flask, render_template, request, jsonify
 import requests
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="public/static", static_url_path="/static")
 
 # URL de la API asignada
 ML4K_API_URL = "https://machinelearningforkids.co.uk/api/scratch/a6cd7390-dee7-11f1-92a1-db0daa3843b7f406b8d5-bb01-4472-b72f-42b9549ef62d/classify"
